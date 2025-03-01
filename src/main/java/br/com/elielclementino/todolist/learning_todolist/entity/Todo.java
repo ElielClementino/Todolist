@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Todo {
     
     @Id
@@ -31,4 +29,10 @@ public class Todo {
     @NotNull
     private int priority;
 
+    public Todo(String name, String description, Boolean accomplished, int priority) {
+        this.name = name;
+        this.description = description;
+        this.accomplished = accomplished;
+        this.priority = priority;
+    }
 }
