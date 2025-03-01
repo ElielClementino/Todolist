@@ -90,4 +90,35 @@ class LearningTodolistApplicationTests {
 		.jsonPath("$[2].priority").isEqualTo(3);
 	}
 
+    @Test
+	void testUpdateSuccess() {
+		todoRepository.save(new Todo("Tarefa1", "TarefaDesc1", false, 1));
+
+		webTestClient
+		.put()
+		.uri("/todos/1")
+		.bodyValue(
+			new Todo("Tarefa1", "TarefaDesc1Updated", false, 2)
+		)
+		.exchange()
+		.expectStatus().isOk()
+		.expectBody()
+		.jsonPath("$.length()").isEqualTo(1)
+		.jsonPath("$[0].description").isEqualTo("TarefaDesc1Updated")
+		.jsonPath("$[0].priority").isEqualTo(2);
+	}
+
+	@Test
+	void testupdateFailure() {
+		todoRepository.save(new Todo("Tarefa1", "TarefaDesc1", false, 1));
+
+		webTestClient
+		.put()
+		.uri("/todos/2")
+		.bodyValue(
+			new Todo("Tarefa1", "TarefaDesc1", false, 1)
+		)
+		.exchange()
+		.expectStatus().isBadRequest();
+	}
 }
