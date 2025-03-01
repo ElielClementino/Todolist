@@ -121,4 +121,28 @@ class LearningTodolistApplicationTests {
 		.exchange()
 		.expectStatus().isBadRequest();
 	}
+
+    @Test
+	void testDeleteSuccess() {
+		todoRepository.save(new Todo("Tarefa1", "TarefaDesc1", false, 1));
+
+		webTestClient
+		.delete()
+		.uri("/todos/1")
+		.exchange()
+		.expectStatus().isOk()
+		.expectBody()
+		.jsonPath("$.length()").isEqualTo(0);
+	}
+
+	@Test
+	void testDeleteFailure() {
+		todoRepository.save(new Todo("Tarefa1", "TarefaDesc1", false, 1));
+
+		webTestClient
+		.delete()
+		.uri("/todos/3")
+		.exchange()
+		.expectStatus().isBadRequest();
+	}
 }
