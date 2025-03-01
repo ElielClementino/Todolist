@@ -20,6 +20,7 @@ import br.com.elielclementino.todolist.learning_todolist.repository.TodoReposito
     "spring.jpa.hibernate.ddl-auto=update"
 })
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class LearningTodolistApplicationTests {
     @Autowired
@@ -42,4 +43,51 @@ class LearningTodolistApplicationTests {
 		.expectBody()
 		.jsonPath("$.length()").isEqualTo(3);
 	}
+
+    @Test
+	void testCreateTodoSuccess() {
+		var todo = new Todo("Todo test", "Todo feito para teste", false, 1);
+
+		webTestClient
+		.post()
+		.uri("/todos")
+		.bodyValue(todo)
+		.exchange()
+		.expectBody()
+		.jsonPath("$").isArray()
+		.jsonPath("$.length()").isEqualTo(1)
+		.jsonPath("$[0].name").isEqualTo(todo.getName())
+		.jsonPath("$[0].description").isEqualTo(todo.getDescription())
+		.jsonPath("$[0].accomplished").isEqualTo(todo.getAccomplished())
+		.jsonPath("$[0].priority").isEqualTo(todo.getPriority());
+	}
+
+	@Test
+	void testCreateTodoFailure() {
+		webTestClient
+		.post()
+		.uri("/todos")
+		.bodyValue(
+			new Todo("", "", false, 1)
+		)
+		.exchange()
+		.expectStatus().isBadRequest();
+	}
+
+	@Test
+	void testIfOrdenationisWorking() {
+		todoRepository.save(new Todo("Tarefa1", "TarefaDesc1", false, 1));
+		todoRepository.save(new Todo("Tarefa1", "TarefaDesc1", false, 2));
+		todoRepository.save(new Todo("Tarefa1", "TarefaDesc1", false, 3));
+
+		webTestClient
+		.get()
+		.uri("/todos")
+		.exchange()
+		.expectBody()
+		.jsonPath("$.length()").isEqualTo(3)
+		.jsonPath("$[0].priority").isEqualTo(1)
+		.jsonPath("$[2].priority").isEqualTo(3);
+	}
+
 }
