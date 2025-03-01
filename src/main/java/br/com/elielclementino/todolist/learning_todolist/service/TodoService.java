@@ -50,4 +50,14 @@ public class TodoService {
 
         return listTodo();
     }
+
+    public List<Todo> deleteTodo(Long id) {
+        if (!todoRepository.existsById(id)) {
+            throw new NullPointerException("Todo not found");
+        }
+
+        todoRepository.deleteById(id);
+
+        return listTodo();
+    }
 }
