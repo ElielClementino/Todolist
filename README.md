@@ -36,7 +36,7 @@ docker compose up -d
 
 ### ▶️ Executar a aplicação  
 ```sh
-java -jar target/todolist.jar  
+java -jar target/learning-todolist-0.0.1-SNAPSHOT.jar
 ```
 
 ## 🔗 Endpoints  
