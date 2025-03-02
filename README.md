@@ -56,7 +56,7 @@ A documentação completa dos endpoints está disponível no **Swagger**:
 ```json
 {
   "name": "Nova Tarefa",
-  "priority": "Alta"
+  "priority": 1
 }  
 ```
 
@@ -73,7 +73,7 @@ A documentação completa dos endpoints está disponível no **Swagger**:
 ```json
 {
   "name": "Estudar Spring Boot",
-  "priority": "Média"
+  "priority": 2
 }  
 ```
 
